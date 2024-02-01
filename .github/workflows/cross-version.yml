@@ -1,0 +1,33 @@
+name: Cross-Version
+
+on: [push, pull_request]
+
+env:
+  MAVEN_ARGS: -B -V -ntp -e -Djansi.passthrough=true -Dstyle.color=always
+
+jobs:
+
+  spring_boot:
+
+    name: Spring Boot ${{ matrix.spring }}
+    strategy:
+      fail-fast: false
+      matrix:
+        spring: [3.0.13, 3.1.8, 3.2.2, 3.3.0-M1, 3.3.0-SNAPSHOT]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          cache: maven
+      - name: Set Spring Boot ${{ matrix.spring }}
+        run: >
+          ./mvnw $MAVEN_ARGS versions:update-parent
+          -DparentVersion=${{ matrix.spring }}
+          -DskipResolution
+      - name: Test
+        run: ./mvnw $MAVEN_ARGS verify
