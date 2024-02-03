@@ -3,6 +3,7 @@ package io.github.scordio.playground;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.domain.Specification;
 
 @DataJpaTest(showSql = false) // use P6Spy
 class BookRepositoryTest {
@@ -29,6 +30,13 @@ class BookRepositoryTest {
 
 		// select b1_0.id,b1_0.author_id,b1_0.name from book b1_0 where b1_0.author_id=1;
 		underTest.findAllByAuthorIdWithJPQL(homer.getId());
+
+		// select b1_0.id,b1_0.author_id,b1_0.name from book b1_0 where b1_0.author_id=1;
+		underTest.findAll(byAuthorId(homer.getId()));
+	}
+
+	private static Specification<Book> byAuthorId(Long authorId) {
+		return (root, query, builder) -> builder.equal(root.get("author").get("id"), authorId);
 	}
 
 }

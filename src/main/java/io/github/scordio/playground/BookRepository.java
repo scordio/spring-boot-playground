@@ -1,12 +1,13 @@
 package io.github.scordio.playground;
 
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-interface BookRepository extends Repository<Book, Long> {
+interface BookRepository extends Repository<Book, Long>, JpaSpecificationExecutor<Book> {
 
 	Book save(Book book);
 
