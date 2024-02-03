@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
-
 @DataJpaTest(showSql = false) // use P6Spy
 class BookRepositoryTest {
 
@@ -27,7 +25,10 @@ class BookRepositoryTest {
 		underTest.save(new Book("Odyssey", homer));
 
 		// select book0_.id as id1_1_, book0_.author_id as author_i3_1_, book0_.name as name2_1_ from book book0_ left outer join author author1_ on book0_.author_id=author1_.id where author1_.id=1;
-		List<Book> books = underTest.findAllByAuthorId(homer.getId());
+		underTest.findAllByAuthorId(homer.getId());
+
+		// select book0_.id as id1_1_, book0_.author_id as author_i3_1_, book0_.name as name2_1_ from book book0_ where book0_.author_id=1;
+		underTest.findAllByAuthorIdWithJPQL(homer.getId());
 	}
 
 }
