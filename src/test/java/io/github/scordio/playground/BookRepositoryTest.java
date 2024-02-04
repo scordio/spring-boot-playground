@@ -1,5 +1,9 @@
 package io.github.scordio.playground;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,6 +17,9 @@ class BookRepositoryTest {
 
 	@Autowired
 	private AuthorRepository authorRepository;
+
+	@Autowired
+	private EntityManager entityManager;
 
 	@Test
 	void findAllByAuthorId() {
@@ -33,6 +40,13 @@ class BookRepositoryTest {
 
 		// select b1_0.id,b1_0.author_id,b1_0.name from book b1_0 where b1_0.author_id=1;
 		underTest.findAll(byAuthorId(homer.getId()));
+
+		// select b1_0.id,b1_0.author_id,b1_0.name from book b1_0 where b1_0.author_id=1;
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Book> cq = cb.createQuery(Book.class);
+		Root<Book> root = cq.from(Book.class);
+		cq.select(root).where(cb.equal(root.get("author").get("id"), homer.getId()));
+		entityManager.createQuery(cq).getResultList();
 	}
 
 	private static Specification<Book> byAuthorId(Long authorId) {
