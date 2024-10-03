@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        spring: [3.0.13, 3.1.8, 3.2.2, 3.3.0-M1, 3.3.0-SNAPSHOT]
+        spring: [3.0.13, 3.1.12, 3.2.10, 3.3.4, 3.4.0-SNAPSHOT]
     runs-on: ubuntu-latest
 
     steps:
