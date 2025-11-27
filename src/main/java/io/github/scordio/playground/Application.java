@@ -22,15 +22,29 @@ public class Application {
 	}
 
 	@Bean
-	Job job(JobBuilderFactory factory, Step step) {
-		return factory.get("job").start(step).build();
+	Job job1(JobBuilderFactory factory, Step step1) {
+		return factory.get("job1").start(step1).build();
 	}
 
 	@Bean
-	Step step(StepBuilderFactory factory) {
-		return factory.get("step")
+	Step step1(StepBuilderFactory factory) {
+		return factory.get("step1")
 			.<Item, Item>chunk(10)
 			.reader(new ListItemReader<>(List.of(new Item("Bob"), new Item("John"))))
+			.writer(new ListItemWriter<>())
+			.build();
+	}
+
+	@Bean
+	Job job2(JobBuilderFactory factory, Step step2) {
+		return factory.get("job2").start(step2).build();
+	}
+
+	@Bean
+	Step step2(StepBuilderFactory factory) {
+		return factory.get("step2")
+			.<Item, Item>chunk(10)
+			.reader(new ListItemReader<>(List.of(new Item("Alice"), new Item("Marge"))))
 			.writer(new ListItemWriter<>())
 			.build();
 	}
