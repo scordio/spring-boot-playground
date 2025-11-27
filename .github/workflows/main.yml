@@ -9,11 +9,7 @@ jobs:
 
   spring-boot:
 
-    name: Spring Boot ${{ matrix.spring }}
-    strategy:
-      fail-fast: false
-      matrix:
-        spring: [3.0.13, 3.1.12, 3.2.12, 3.3.13, 3.4.11, 3.5.7, 4.0.0-SNAPSHOT]
+    name: Spring Boot 2.7.18
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +20,5 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
           cache: maven
-      - name: Set Spring Boot ${{ matrix.spring }}
-        run: >
-          ./mvnw $MAVEN_ARGS versions:update-parent
-          -DparentVersion=${{ matrix.spring }}
-          -DskipResolution
       - name: Test
         run: ./mvnw $MAVEN_ARGS verify
